@@ -1,9 +1,11 @@
 name: Sync Fork with Upstream
 
 on:
-  # 这里可以设置定时触发，例如每10分钟
+  # 定时触发：每10分钟执行一次
   schedule:
     - cron: '*/10 * * * *'
+  # 手动触发：在Actions页面可手动运行工作流
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -12,21 +14,20 @@ jobs:
       - name: Checkout Fork
         uses: actions/checkout@v3
         with:
-          # 目标仓库
-          repository: ThatCoders/thatcoders.github.io
+          repository: ThatCoders/thatcoders.github.io  # 目标仓库（被同步的仓库）
           token: ${{ secrets.GT }}
 
       - name: Add Upstream Remote
-        # 添加源仓库为上游仓库
+        # 添加上游仓库（源仓库，即需要同步的原始仓库）
         run: git remote add upstream https://github.com/acncoder/acncoder.git
 
       - name: Fetch Upstream Changes
         run: git fetch upstream
 
       - name: Merge Upstream Changes
-        # 假设源仓库和目标仓库的主分支都是 main，若不是请修改为实际分支名
+        # 合并上游仓库的main分支（根据实际分支名修改）
         run: git merge upstream/main
 
       - name: Push Changes to Fork
-        # 假设目标仓库的主分支是 main，若不是请修改为实际分支名
+        # 推送到目标仓库的main分支（根据实际分支名修改）
         run: git push origin main
