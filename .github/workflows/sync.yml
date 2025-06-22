@@ -26,7 +26,7 @@ jobs:
 
       - name: Merge Upstream Changes
         # 合并上游仓库的main分支（根据实际分支名修改）
-        run: git merge upstream/main
+        run: git merge upstream/master
 
       - name: Push Changes to Fork
         # 推送到目标仓库的main分支（根据实际分支名修改）
