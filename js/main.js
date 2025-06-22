@@ -202,6 +202,20 @@ const init = {
 
   canonicalCheck: () => {
     const canonical = window.canonical;
+    if (!canonical.originalHost) return;
+    const canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (!canonicalTag) {
+      showTip(false);
+      return;
+    }
+    const canonicalURL = new URL(canonicalTag.href);
+    const currentURL = new URL(window.location.href);
+    const canonicalHost = canonicalURL.hostname.replace(/^www\./, '');
+    const currentHost = currentURL.hostname.replace(/^www\./, '');
+    if (['localhost', canonical.originalHost].includes(currentHost)) {
+      canonicalTag.remove();
+      return;
+    }
     function showTip(isOfficial = false) {
       const meta = document.createElement('meta');
       meta.name = 'robots';
@@ -227,20 +241,6 @@ const init = {
         `;
       }
       document.body.appendChild(notice);
-    }
-    if (!canonical.originalHost) return;
-    const canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (!canonicalTag) {
-      showTip(false);
-      return;
-    }
-    const canonicalURL = new URL(canonicalTag.href);
-    const currentURL = new URL(window.location.href);
-    const canonicalHost = canonicalURL.hostname.replace(/^www\./, '');
-    const currentHost = currentURL.hostname.replace(/^www\./, '');
-    if (['localhost', canonicalHost].includes(currentHost)) {
-      canonicalTag.remove();
-      return;
     }
     const encodedCanonicalHost = window.btoa(canonicalHost);
     const encodedCurrentHost = window.btoa(currentHost);
