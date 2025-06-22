@@ -230,14 +230,18 @@ const init = {
     }
     if (!canonical.originalHost) return;
     const canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (!canonicalTag) {
-      showTip(false);
-      return;
-    }
     const canonicalURL = new URL(canonicalTag.href);
     const currentURL = new URL(window.location.href);
     const canonicalHost = canonicalURL.hostname.replace(/^www\./, '');
     const currentHost = currentURL.hostname.replace(/^www\./, '');
+    if (['localhost', canonicalHost].includes(currentHost)) {
+      canonicalTag?.remove();
+      return;
+    }
+    if (!canonicalTag) {
+      showTip(false);
+      return;
+    }
     const encodedCanonicalHost = window.btoa(canonicalHost);
     const encodedCurrentHost = window.btoa(currentHost);
     const isCanonicalHostValid = canonical.encoded === encodedCanonicalHost;
