@@ -16,7 +16,12 @@ jobs:
         with:
           repository: ThatCoders/thatcoders.github.io  # 目标仓库（被同步的仓库）
           token: ${{ secrets.GT }}
-
+          
+      - name: Configure Git Identity
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "acncoder@gmail.com"
+          
       - name: Add Upstream Remote
         # 添加上游仓库（源仓库，即需要同步的原始仓库）
         run: git remote add upstream https://github.com/acncoder/acncoder.git
